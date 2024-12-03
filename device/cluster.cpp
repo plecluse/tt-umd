@@ -292,8 +292,8 @@ void Cluster::create_device(
             num_host_mem_channels,
             logical_device_id,
             pci_interface_id,
-            pci_device->get_device_num(),
-            pci_device->revision_id);
+            pcie_device_id,
+            pcie_revision);
 
         initialize_interprocess_mutexes(pci_interface_id, clean_system_resources);
 
@@ -547,7 +547,6 @@ Cluster::Cluster(
             m_num_pci_devices,
             (m_num_pci_devices > 1) ? "s" : "",
             available_device_ids);
-        log_debug(LogSiliconDriver, "Passed target devices: {}", target_devices);
     }
 
     std::set<chip_id_t> target_devices;
@@ -1111,13 +1110,12 @@ void Cluster::write_device_memory(
 
     log_debug(
         LogSiliconDriver,
-        "Cluster::write_device_memory to chip:{} {}-{} at 0x{:x} size_in_bytes: {} small_access: {}",
+        "Cluster::write_device_memory to chip:{} {}-{} at 0x{:x} size_in_bytes: {}",
         target.chip,
         target.x,
         target.y,
         address,
-        size_in_bytes,
-        small_access);
+        size_in_bytes);
 
     std::int32_t tlb_index = 0;
     std::optional<std::tuple<std::uint64_t, std::uint64_t>> tlb_data = std::nullopt;
@@ -1231,7 +1229,7 @@ void Cluster::read_buffer(
 
     log_debug(
         LogSiliconDriver,
-        "Cluster::read_buffer (src_device_id: {}, ch: {}) from 0x{:x}",
+        "Cluster::read_buffer (src_device_id: {}, ch: {}) from {}",
         src_device_id,
         channel,
         user_scratchspace);
