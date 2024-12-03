@@ -509,12 +509,12 @@ void tt_ClusterDescriptor::load_ethernet_connections_from_connectivity_descripto
     for (const auto &[chip, chan_to_chip_chan_map] : desc.ethernet_connections) {
         for (const auto &[chan, chip_and_chan] : chan_to_chip_chan_map) {
             log_debug(
-                LogSiliconDriver,
+                tt::LogSiliconDriver,
                 "\tchip: {}, chan: {}  <-->  chip: {}, chan: {}",
                 chip,
                 chan,
-                chip_and_chan.x,
-                chip_and_chan.y);
+                std::get<0>(chip_and_chan),
+                std::get<1>(chip_and_chan));
         }
     }
 
